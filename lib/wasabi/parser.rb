@@ -154,10 +154,10 @@ module Wasabi
       binding_type = at_xpath(operation, "../@type").to_s.split(':').last
       port_type_input = at_xpath(operation, "../../wsdl:portType[@name='#{binding_type}']/wsdl:operation[@name='#{operation_name}']/wsdl:input")
 
-      port_message_ns_id, port_message_type = port_type_input.attribute("message").to_s.split(':')
+      port_message_ns_id, port_message_type = port_type_input.attribute("message").to_s.split(':') rescue [nil,nil]
 
       # Kinda hackey maybe?  This assumes there is ever only one 'part' element in the message.
-      message_ns_id, message_type = at_xpath(port_type_input, "../../../wsdl:message[@name='#{port_message_type}']/wsdl:part[1]").attribute("element").to_s.split(':')
+      message_ns_id, message_type = at_xpath(port_type_input, "../../../wsdl:message[@name='#{port_message_type}']/wsdl:part[1]").attribute("element").to_s.split(':') rescue [nil,nil]
 
       # Fall back to message name in portType input if no 'element' attribute in wsdl:message
       if message_type
